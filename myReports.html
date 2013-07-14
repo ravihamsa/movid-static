@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Movid</title>
+    <link rel="stylesheet" href="libs/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="style.css"/>
+
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <div class="page-header">
+                    <div class="row">
+                        <div class="span5">
+                            <h1 class="logo">Movid
+                                <small>where movies live</small>
+                            </h1>
+                        </div>
+                        <div class="span7">
+                            <ul class="pull-right inline-ul margin-t">
+                                <li>
+                                    welcome <strong>Theater agent</strong>
+                                </li>
+                                <li>|</li>
+                                <li>
+                                    <a href="register">Log out</a>
+                                </li>
+                            </ul>
+
+                        </div>
+                    </div>
+
+                    <div class="navbar">
+                        <div class="navbar-inner">
+                            <ul class="nav">
+                                <li class="active"><a href="myReports.html">My Reports</a></li>
+                                <li><a href="invoiceReports.html">Invoice Reports</a></li>
+                                <li><a href="customReports.html">Custom Reports</a></li>
+                                <li><a href="trendingReports.html">Trending Reports</a></li>
+                                <li><a href="support.html">Support</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="span12">
+                <div id="main">
+
+
+
+                    <div class="dimension-list">
+
+                    </div>
+
+                    <div class="p10">
+                        <h4>My Reports Page</h4>
+
+                        <div class="row-fluid">
+                            <div class="span6">
+                                <div id="chart1">
+                                    <div class="chart-container"
+                                         style="height:200px; border: 1px solid #efefef; margin-bottom: 20px;">
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="span6">
+                                <div id="chart2">
+                                    <div class="chart-container"
+                                         style="height:200px; border: 1px solid #efefef; margin-bottom: 20px;">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h4>Ticket Sales and Collection</h4>
+
+                        <div class="row-fluid">
+                            <div class="span12">
+                                <div id="table1">
+                                    <div class="table-container">
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="clearfix"></div>
+</div>
+<div id="footer">
+    <p>Copyright 2013 &copy; Movied. All Rights Reserved</p>
+</div>
+
+
+<script id="table-template" type="text/x-handlebars-template">
+    <table class="table table-bordered">
+        <thead>
+        <tr class="highlight-bg">
+            <th class="v-align-m" rowspan="2">{{dimension}}</th>
+            <th colspan="3">
+                <div class="text-center">{{yLabel}}</div>
+            </th>
+            <th colspan="3">
+                <div class="text-center">{{yLabel2}}</div>
+            </th>
+        </tr>
+        <tr class="highlight-bg">
+            <td>
+                <div class="text-right">Expected</div>
+            </td>
+            <td>
+                <div class="text-right">Actual</div>
+            </td>
+            <td>
+                <div class="text-right">Difference</div>
+            </td>
+            <td>
+                <div class="text-right">Expected</div>
+            </td>
+            <td>
+                <div class="text-right">Actual</div>
+            </td>
+            <td>
+                <div class="text-right">Difference</div>
+            </td>
+        </tr>
+
+        </thead>
+        <tbody>
+        {{#each rows}}
+        <tr>
+            <td>{{dimension}}</td>
+            <td>
+                <div class="text-right">{{expectedCollection}}</div>
+            </td>
+            <td>
+                <div class="text-right">{{actualCollection}}</div>
+            </td>
+            <td>
+                <div class="text-right">{{differenceCollection}}</div>
+            </td>
+            <td>
+                <div class="text-right">{{expectedTicket}}</div>
+            </td>
+            <td>
+                <div class="text-right">{{actualTicket}}</div>
+            </td>
+            <td>
+                <div class="text-right">{{differenceTicket}}</div>
+            </td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</script>
+
+
+<script type="text/javascript" src="libs/jquery.min.js"></script>
+<script type="text/javascript" src="libs/underscore-min.js"></script>
+<script type="text/javascript" src="libs/handlebars.js"></script>
+<script type="text/javascript" src="libs/highcharts.js"></script>
+
+<script type="text/javascript">
+
+var renderCollectionChart = function () {
+
+    var expectedData = [300000, 0, 0]
+    var actualData = [0, 267850, 0]
+    var differenceData = [0, 0, 32150]
+
+
+    var yLabel = 'state';
+
+    var xAxis = {
+        categories: ['Expected', 'Actual', 'Difference'],
+        gridLineColor: '#ccc',
+        gridLineDashStyle: 'shortdot',
+        gridLineWidth: 1
+    };
+
+
+    var series = [
+        {
+            name: yLabel,
+            data: expectedData,
+            showInLegend: false,
+            color: '#6296c7',
+            marker: {
+                fillColor: '#ffffff',
+                lineColor: '#1568b6',
+                lineWidth: 1,
+                radius: 4
+            },
+            stack: 'actual'
+
+        },
+        {
+            name: yLabel,
+            data: actualData,
+            showInLegend: false,
+            color: '#00b866',
+            marker: {
+                fillColor: '#ffffff',
+                lineColor: '#1568b6',
+                lineWidth: 1,
+                radius: 4
+            },
+            stack: 'actual'
+
+        },
+        {
+            name: yLabel,
+            data: differenceData,
+            showInLegend: false,
+            color: '#ff2a1a',
+            marker: {
+                fillColor: '#ffffff',
+                lineColor: '#1568b6',
+                lineWidth: 1,
+                radius: 4
+            },
+            stack: 'actual'
+
+        }
+    ];
+
+    var chartEl = $('#chart1 .chart-container');
+    chartEl.highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: '' + yLabel,
+            align: 'left',
+            style: {
+                color: '#333'
+            }
+        },
+        xAxis: xAxis,
+        yAxis: {
+            title: {
+                text: ''
+            },
+            plotLines: [
+                {
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }
+            ],
+            gridLineColor: '#ccc',
+            gridLineDashStyle: 'shortdot'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -10,
+            y: 100,
+            borderWidth: 0
+        },
+        series: series,
+        credits: {
+            enabled: false
+        },
+        plotOptions: {
+            column: {
+                stacking: 'normal'
+            }
+        }
+    });
+
+}
+
+var renderTicketSoldChart = function () {
+
+    var expectedData = [4000, 0, 0]
+    var actualData = [0, 3342, 0]
+    var differenceData = [0, 0, 658]
+
+
+    var yLabel = 'state';
+
+    var xAxis = {
+        categories: ['Expected', 'Actual', 'Difference'],
+        gridLineColor: '#ccc',
+        gridLineDashStyle: 'shortdot',
+        gridLineWidth: 1
+    };
+
+
+    var series = [
+        {
+            name: yLabel,
+            data: expectedData,
+            showInLegend: false,
+            color: '#6296c7',
+            marker: {
+                fillColor: '#ffffff',
+                lineColor: '#1568b6',
+                lineWidth: 1,
+                radius: 4
+            },
+            stack: 'actual'
+
+        },
+        {
+            name: yLabel,
+            data: actualData,
+            showInLegend: false,
+            color: '#00b866',
+            marker: {
+                fillColor: '#ffffff',
+                lineColor: '#1568b6',
+                lineWidth: 1,
+                radius: 4
+            },
+            stack: 'actual'
+
+        },
+        {
+            name: yLabel,
+            data: differenceData,
+            showInLegend: false,
+            color: '#ff2a1a',
+            marker: {
+                fillColor: '#ffffff',
+                lineColor: '#1568b6',
+                lineWidth: 1,
+                radius: 4
+            },
+            stack: 'actual'
+
+        }
+    ];
+
+    var chartEl = $('#chart2 .chart-container');
+    chartEl.highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: '' + yLabel,
+            align: 'left',
+            style: {
+                color: '#333'
+            }
+        },
+        xAxis: xAxis,
+        yAxis: {
+            title: {
+                text: ''
+            },
+            plotLines: [
+                {
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }
+            ],
+            gridLineColor: '#ccc',
+            gridLineDashStyle: 'shortdot'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -10,
+            y: 100,
+            borderWidth: 0
+        },
+        series: series,
+        credits: {
+            enabled: false
+        },
+        plotOptions: {
+            column: {
+                stacking: 'normal'
+            }
+        }
+    });
+
+}
+
+
+var renderTable = function () {
+    var data = [
+        [
+            {"_id": "city1111", "collection": 3025, "ticketsSold": 39},
+            {"_id": "city0101", "collection": 21350, "ticketsSold": 251},
+            {"_id": "city1110", "collection": 16275, "ticketsSold": 219},
+            {"_id": "city1010", "collection": 15300, "ticketsSold": 227},
+            {"_id": "city1101", "collection": 11575, "ticketsSold": 171},
+            {"_id": "city0010", "collection": 26050, "ticketsSold": 262},
+            {"_id": "city1000", "collection": 26425, "ticketsSold": 342},
+            {"_id": "city0011", "collection": 6375, "ticketsSold": 77},
+            {"_id": "city1011", "collection": 34800, "ticketsSold": 435},
+            {"_id": "city0110", "collection": 5250, "ticketsSold": 51}
+        ],
+        [
+            {"_id": "city1111", "collection": 3025, "ticketsSold": 39},
+            {"_id": "city0101", "collection": 21350, "ticketsSold": 251},
+            {"_id": "city1110", "collection": 16275, "ticketsSold": 219},
+            {"_id": "city1010", "collection": 15300, "ticketsSold": 227},
+            {"_id": "city1101", "collection": 11575, "ticketsSold": 171},
+            {"_id": "city0010", "collection": 26050, "ticketsSold": 262},
+            {"_id": "city1000", "collection": 26425, "ticketsSold": 342},
+            {"_id": "city0011", "collection": 6375, "ticketsSold": 77},
+            {"_id": "city1011", "collection": 34800, "ticketsSold": 435},
+            {"_id": "city0110", "collection": 5250, "ticketsSold": 51}
+        ]
+    ]
+    var collectionData = data[0];
+    var ticketData = data[1];
+    var categoryId = '_id';
+    var yAxis = 'city';
+
+    var categories = _.map(collectionData, function (item) {
+        return item[categoryId];
+    })
+
+
+
+    var clonedCollectionData = _.clone(collectionData);
+    var sortedCollectionData = _.sortBy(clonedCollectionData, function (item) {
+        return -item[categoryId];
+    });
+
+    var formattedCollectionData = _.map(sortedCollectionData, function (item) {
+        return item['collection'];
+    })
+
+    var expectedCollectionData = _.map(sortedCollectionData, function (item, index) {
+        var formattedValue = formattedCollectionData[index];
+
+        var base = Math.pow(10, ('' + formattedValue).length - 1);
+        var val = Math.ceil(formattedValue / base) * base;
+        return val;
+    })
+
+
+    var differenceCollectionData = _.map(formattedCollectionData, function (value, index) {
+        return expectedCollectionData[index] - value;
+    })
+
+    var clonedTicketData = _.clone(ticketData);
+    var sortedTicketData = _.sortBy(clonedTicketData, function (item) {
+        return -item[categoryId];
+    });
+
+    var formattedTicketData = _.map(sortedTicketData, function (item) {
+        return item['ticketsSold'];
+    })
+
+    var expectedTicketData = _.map(sortedTicketData, function (item, index) {
+        var formattedValue = formattedTicketData[index];
+
+        var base = Math.pow(10, ('' + formattedValue).length - 1);
+        var val = Math.ceil(formattedValue / base) * base;
+        return val;
+    })
+
+
+    var differenceTicketData = _.map(formattedTicketData, function (value, index) {
+        return expectedTicketData[index] - value;
+    })
+
+
+    var rows = _.map(formattedCollectionData, function (value, index) {
+        var actualCollection = value;
+        var expectedCollection = expectedCollectionData[index];
+        var diffCollection = differenceCollectionData[index];
+
+        var actualTicket = formattedTicketData[index];
+        var expectedTicket = expectedTicketData[index];
+        var diffTicket = differenceTicketData[index];
+
+        return _.object(['dimension', 'actualCollection', 'expectedCollection', 'differenceCollection', 'actualTicket', 'expectedTicket', 'differenceTicket'], [categories[index], actualCollection, expectedCollection, diffCollection, actualTicket, expectedTicket, diffTicket])
+    })
+
+    console.log(rows);
+
+
+    var tableEl = $('#table1 .table-container');
+    tableEl.empty();
+
+
+    var tableTemplate = Handlebars.compile($('#table-template').html());
+
+    tableEl.html(tableTemplate({rows: rows,
+        dimension: 'city',
+        yLabel: 'Collection',
+        yLabel2: 'Tickets Sold'}))
+
+}
+
+
+renderCollectionChart();
+renderTicketSoldChart();
+renderTable();
+
+</script>
+
+
+</body>
+</html>
